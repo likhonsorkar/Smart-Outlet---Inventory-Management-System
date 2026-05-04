@@ -1,0 +1,54 @@
+# OS files
+.DS_Store
+Thumbs.db
+db.sqlite3-journal
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Python / Django
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+db.sqlite3
+.python-version
+
+# Node / Vite (smart-outlet)
+smart-outlet/node_modules/
+smart-outlet/dist/
+smart-outlet/dist-ssr/
+smart-outlet/*.local
+smart-outlet/logs/
+smart-outlet/*.log
+smart-outlet/npm-debug.log*
+smart-outlet/yarn-debug.log*
+smart-outlet/yarn-error.log*
+smart-outlet/pnpm-debug.log*
+smart-outlet/lerna-debug.log*
+
+# General
+.env
+.env.local
+.env.*.local
