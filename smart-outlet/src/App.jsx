@@ -89,7 +89,7 @@ const AppContent = () => {
         {/* Dashboard Routes */}
         <Route path="/dashboard/customer" element={<CustomerDashboard />} />
         <Route path="/dashboard/admin" element={<AdminDashboard />} />
-        <Route path="/dashboard/manager" element={<ManagerDashboard />} />
+        <Route path="/dashboard/no" element={<ManagerDashboard />} />
       </Routes>
 
       {!isDashboard && <Footer />}
