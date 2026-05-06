@@ -6,7 +6,7 @@ const registerUser = async (userData) => {
 };
 
 const loginUser = async (credentials) => {
-  const response = await apiClient.post('/auth/jwt/create/', credentials);
+  const response = await apiClient.post('/v1/api/login/', credentials);
   if (response.data.access) {
     localStorage.setItem('access_token', response.data.access);
     localStorage.setItem('refresh_token', response.data.refresh);

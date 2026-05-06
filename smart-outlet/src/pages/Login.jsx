@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
 import authService from '../services/auth-service';
@@ -9,6 +9,13 @@ const Login = () => {
   const [apiError, setApiError] = useState('');
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const token = localStorage.getItem('access_token');
+    if (token) {
+      navigate('/dashboard/customer');
+    }
+  }, [navigate]);
+
   const onSubmit = async (data) => {
     setLoading(true);
     setApiError('');
@@ -16,6 +23,7 @@ const Login = () => {
       const credentials = {
         phone_number: `${data.countryCode}${data.mobile}`,
         password: data.password,
+        remember_me: data.rememberMe || false,
       };
       await authService.loginUser(credentials);
       navigate('/dashboard/customer');
@@ -106,7 +114,11 @@ const Login = () => {
 
           <div className="flex items-center justify-between ml-1">
             <label className="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
+              <input 
+                type="checkbox" 
+                {...register("rememberMe")}
+                className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" 
+              />
               <span className="text-sm font-bold text-gray-600">Remember me</span>
             </label>
             <a href="#" className="text-sm font-bold text-blue-600 hover:text-indigo-600 transition-colors">Forgot password?</a>
