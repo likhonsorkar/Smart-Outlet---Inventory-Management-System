@@ -66,9 +66,9 @@ const Header = () => {
             <i className="fa-solid fa-magnifying-glass text-gray-400 mr-2"></i>
             <input type="text" placeholder="Search..." className="bg-transparent border-none focus:ring-0 text-sm w-32 lg:w-48 outline-none" />
           </div>
-          <a href="#" className="hover:text-blue-600 transition-all relative p-2 rounded-full hover:bg-gray-100">
+          <Link to="/login" className="hover:text-blue-600 transition-all relative p-2 rounded-full hover:bg-gray-100">
             <i className="fa-regular fa-user text-xl"></i>
-          </a>
+          </Link>
           <a href="#" className="hover:text-blue-600 transition-all relative p-2 rounded-full hover:bg-gray-100">
             <i className="fa-solid fa-cart-shopping text-xl"></i>
             <span className="absolute top-1 right-1 bg-blue-600 text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center border-2 border-white">2</span>

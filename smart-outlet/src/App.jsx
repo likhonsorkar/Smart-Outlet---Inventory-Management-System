@@ -13,6 +13,10 @@ import CustomerDashboard from './pages/CustomerDashboard';
 import AdminDashboard from './pages/AdminDashboard';
 import ManagerDashboard from './pages/ManagerDashboard';
 
+// Auth Pages
+import Login from './pages/Login';
+import Register from './pages/Register';
+
 const HomePage = () => (
   <main className="flex-grow pt-24">
     {/* Hero Section */}
@@ -85,11 +89,13 @@ const AppContent = () => {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/product/:id" element={<ProductDetail />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         
         {/* Dashboard Routes */}
         <Route path="/dashboard/customer" element={<CustomerDashboard />} />
         <Route path="/dashboard/admin" element={<AdminDashboard />} />
-        <Route path="/dashboard/no" element={<ManagerDashboard />} />
+        <Route path="/dashboard/manager" element={<ManagerDashboard />} />
       </Routes>
 
       {!isDashboard && <Footer />}
