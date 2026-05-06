@@ -1,13 +1,36 @@
-import React from 'react';
+﻿import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import authService from '../services/auth-service';
 
 const Login = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
+  const [loading, setLoading] = useState(false);
+  const [apiError, setApiError] = useState('');
+  const navigate = useNavigate();
 
-  const onSubmit = (data) => {
-    console.log('Login Data:', data);
-    alert('Login successful! Check console for data.');
+  const onSubmit = async (data) => {
+    setLoading(true);
+    setApiError('');
+    try {
+      const credentials = {
+        phone_number: `${data.countryCode}${data.mobile}`,
+        password: data.password,
+      };
+      await authService.loginUser(credentials);
+      navigate('/dashboard/customer');
+    } catch (error) {
+      console.error('Login Error:', error);
+      if (error.response?.data?.detail) {
+        setApiError(error.response.data.detail);
+      } else if (error.response?.status === 401) {
+        setApiError('Invalid phone number or password.');
+      } else {
+        setApiError('Login failed. Please try again.');
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   const countryCodes = [
@@ -25,6 +48,12 @@ const Login = () => {
           <span className="text-blue-600 font-black text-xs uppercase tracking-[0.3em] mb-3 block">Welcome Back</span>
           <h2 className="text-4xl font-black text-gray-900 tracking-tighter">MEMBER <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">LOGIN</span></h2>
         </div>
+
+        {apiError && (
+          <div className="mb-6 p-4 bg-red-50 border border-red-100 text-red-600 rounded-2xl text-sm font-bold text-center">
+            {apiError}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div>
@@ -85,9 +114,10 @@ const Login = () => {
 
           <button
             type="submit"
-            className="w-full bg-gray-900 text-white py-4 rounded-2xl font-black text-lg hover:bg-blue-600 transition-all shadow-xl hover:shadow-blue-600/20 active:scale-[0.98] mt-4"
+            disabled={loading}
+            className={`w-full bg-gray-900 text-white py-4 rounded-2xl font-black text-lg hover:bg-blue-600 transition-all shadow-xl hover:shadow-blue-600/20 active:scale-[0.98] mt-4 ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
           >
-            SIGN IN TO ACCOUNT
+            {loading ? 'SIGNING IN...' : 'SIGN IN TO ACCOUNT'}
           </button>
         </form>
 

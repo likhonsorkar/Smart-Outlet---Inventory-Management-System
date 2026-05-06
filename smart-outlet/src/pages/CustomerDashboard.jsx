@@ -1,8 +1,40 @@
-import React from 'react';
+﻿import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import DashboardLayout from '../components/Dashboard/DashboardLayout';
 import StatCard from '../components/Dashboard/StatCard';
+import authService from '../services/auth-service';
 
 const CustomerDashboard = () => {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const userData = await authService.getCurrentUser();
+        setUser(userData);
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+        navigate('/login');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, [navigate]);
+
+  if (loading) {
+    return (
+      <DashboardLayout role="customer">
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        </div>
+      </DashboardLayout>
+    );
+  }
+
   const recentOrders = [
     { id: '#ORD-7721', date: 'Oct 12, 2023', status: 'Delivered', total: '$299.00' },
     { id: '#ORD-7654', date: 'Oct 05, 2023', status: 'Processing', total: '$89.99' },
@@ -64,17 +96,23 @@ const CustomerDashboard = () => {
             <h3 className="text-xl md:text-2xl font-black tracking-tighter mb-8 text-white/90">Personal <span className="text-white">Profile</span></h3>
             <div className="flex flex-col items-center text-center">
               <div className="w-20 h-20 md:w-24 md:h-24 rounded-full border-4 border-white/20 p-1 mb-6">
-                <div className="w-full h-full rounded-full bg-white flex items-center justify-center text-blue-600 text-2xl md:text-3xl font-black">L</div>
+                <div className="w-full h-full rounded-full bg-white flex items-center justify-center text-blue-600 text-2xl md:text-3xl font-black">
+                  {user?.first_name?.charAt(0) || user?.phone_number?.charAt(0) || 'U'}
+                </div>
               </div>
-              <h4 className="text-lg md:text-xl font-bold mb-1">MD. Likhon Sorkar</h4>
+              <h4 className="text-lg md:text-xl font-bold mb-1 capitalize">{user?.first_name} {user?.last_name}</h4>
+              <p className="text-white/60 font-medium text-xs md:text-sm mb-2">{user?.phone_number}</p>
               <p className="text-white/60 font-medium text-xs md:text-sm mb-8">Premium Member since 2023</p>
               
               <div className="w-full space-y-3 md:space-y-4">
                 <button className="w-full py-3 md:py-4 bg-white text-blue-600 rounded-xl md:rounded-2xl font-black text-xs md:text-sm hover:bg-blue-50 transition-all shadow-xl shadow-blue-900/10">
                   EDIT PROFILE
                 </button>
-                <button className="w-full py-3 md:py-4 bg-white/10 text-white rounded-xl md:rounded-2xl font-black text-xs md:text-sm hover:bg-white/20 transition-all border border-white/20">
-                  ACCOUNT SETTINGS
+                <button 
+                  onClick={() => { authService.logoutUser(); navigate('/login'); }}
+                  className="w-full py-3 md:py-4 bg-white/10 text-white rounded-xl md:rounded-2xl font-black text-xs md:text-sm hover:bg-white/20 transition-all border border-white/20"
+                >
+                  LOGOUT
                 </button>
               </div>
             </div>

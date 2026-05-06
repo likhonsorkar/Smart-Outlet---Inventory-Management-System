@@ -1,14 +1,45 @@
-import React from 'react';
+﻿import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import authService from '../services/auth-service';
 
 const Register = () => {
   const { register, handleSubmit, formState: { errors }, watch } = useForm();
+  const [loading, setLoading] = useState(false);
+  const [apiError, setApiError] = useState('');
+  const navigate = useNavigate();
   const password = watch("password", "");
 
-  const onSubmit = (data) => {
-    console.log('Registration Data:', data);
-    alert('Registration successful! Check console for data.');
+  const onSubmit = async (data) => {
+    setLoading(true);
+    setApiError('');
+    try {
+      const registrationData = {
+        first_name: data.first_name,
+        last_name: data.last_name,
+        phone_number: `${data.countryCode}${data.mobile}`,
+        password: data.password,
+      };
+
+      await authService.registerUser(registrationData);
+      alert('Registration successful! Please login.');
+      navigate('/login');
+    } catch (error) {
+      console.error('Registration Error:', error);
+      if (error.response?.data) {
+        const data = error.response.data;
+        if (typeof data === 'object') {
+          const firstKey = Object.keys(data)[0];
+          setApiError(`${firstKey}: ${data[firstKey]}`);
+        } else {
+          setApiError('Registration failed. Please try again.');
+        }
+      } else {
+        setApiError('Registration failed. Please try again.');
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   const countryCodes = [
@@ -27,33 +58,33 @@ const Register = () => {
           <h2 className="text-4xl font-black text-gray-900 tracking-tighter">CREATE <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">ACCOUNT</span></h2>
         </div>
 
+        {apiError && (
+          <div className="mb-6 p-4 bg-red-50 border border-red-100 text-red-600 rounded-2xl text-sm font-bold text-center capitalize">
+            {apiError}
+          </div>
+        )}
+
         <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="md:col-span-1">
-            <label className="block text-sm font-bold text-gray-700 mb-2 ml-1">Full Name</label>
+            <label className="block text-sm font-bold text-gray-700 mb-2 ml-1">First Name</label>
             <input
               type="text"
-              {...register("fullName", { required: "Full name is required" })}
-              className={`w-full px-4 py-4 bg-gray-50 border-2 rounded-2xl outline-none transition-all ${errors.fullName ? 'border-red-400 focus:border-red-500' : 'border-transparent focus:border-blue-500 focus:bg-white'}`}
-              placeholder="John Doe"
+              {...register("first_name", { required: "First name is required" })}
+              className={`w-full px-4 py-4 bg-gray-50 border-2 rounded-2xl outline-none transition-all ${errors.first_name ? 'border-red-400 focus:border-red-500' : 'border-transparent focus:border-blue-500 focus:bg-white'}`}
+              placeholder="First Name"
             />
-            {errors.fullName && <p className="text-red-500 text-xs mt-2 ml-1 font-bold">{errors.fullName.message}</p>}
+            {errors.first_name && <p className="text-red-500 text-xs mt-2 ml-1 font-bold">{errors.first_name.message}</p>}
           </div>
 
           <div className="md:col-span-1">
-            <label className="block text-sm font-bold text-gray-700 mb-2 ml-1">Email Address</label>
+            <label className="block text-sm font-bold text-gray-700 mb-2 ml-1">Last Name</label>
             <input
-              type="email"
-              {...register("email", { 
-                required: "Email is required",
-                pattern: {
-                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                  message: "Invalid email address"
-                }
-              })}
-              className={`w-full px-4 py-4 bg-gray-50 border-2 rounded-2xl outline-none transition-all ${errors.email ? 'border-red-400 focus:border-red-500' : 'border-transparent focus:border-blue-500 focus:bg-white'}`}
-              placeholder="example@mail.com"
+              type="text"
+              {...register("last_name", { required: "Last name is required" })}
+              className={`w-full px-4 py-4 bg-gray-50 border-2 rounded-2xl outline-none transition-all ${errors.last_name ? 'border-red-400 focus:border-red-500' : 'border-transparent focus:border-blue-500 focus:bg-white'}`}
+              placeholder="Last Name"
             />
-            {errors.email && <p className="text-red-500 text-xs mt-2 ml-1 font-bold">{errors.email.message}</p>}
+            {errors.last_name && <p className="text-red-500 text-xs mt-2 ml-1 font-bold">{errors.last_name.message}</p>}
           </div>
 
           <div className="md:col-span-2">
@@ -114,9 +145,10 @@ const Register = () => {
           <div className="md:col-span-2 mt-4">
             <button
               type="submit"
-              className="w-full bg-gray-900 text-white py-4 rounded-2xl font-black text-lg hover:bg-blue-600 transition-all shadow-xl hover:shadow-blue-600/20 active:scale-[0.98]"
+              disabled={loading}
+              className={`w-full bg-gray-900 text-white py-4 rounded-2xl font-black text-lg hover:bg-blue-600 transition-all shadow-xl hover:shadow-blue-600/20 active:scale-[0.98] ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
             >
-              CREATE MY ACCOUNT
+              {loading ? 'CREATING ACCOUNT...' : 'CREATE MY ACCOUNT'}
             </button>
           </div>
         </form>
