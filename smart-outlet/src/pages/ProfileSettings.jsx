@@ -94,7 +94,7 @@ const ProfileSettings = ({ role }) => {
           </h2>
 
           {message.text && (
-            <div className={p-4 rounded-2xl mb-8 font-bold }>
+            <div className='p-4 rounded-2xl mb-8 font-bold '>
               {message.text}
             </div>
           )}
