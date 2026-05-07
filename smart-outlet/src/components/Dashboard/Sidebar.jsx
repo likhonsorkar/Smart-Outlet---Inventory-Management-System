@@ -17,6 +17,7 @@ const Sidebar = ({ role, isOpen, setIsOpen }) => {
       { name: 'Products', icon: 'fa-laptop', path: '/dashboard/admin/products' },
       { name: 'Users', icon: 'fa-users', path: '/dashboard/admin/users' },
       { name: 'Orders', icon: 'fa-shopping-cart', path: '/dashboard/admin/orders' },
+      { name: 'Profile', icon: 'fa-user', path: '/dashboard/admin/profile' },
       { name: 'Reports', icon: 'fa-file-invoice-dollar', path: '/dashboard/admin/reports' },
     ],
     manager: [
@@ -24,6 +25,7 @@ const Sidebar = ({ role, isOpen, setIsOpen }) => {
       { name: 'Inventory', icon: 'fa-warehouse', path: '/dashboard/manager/inventory' },
       { name: 'Custom Orders', icon: 'fa-clipboard-list', path: '/dashboard/manager/custom-orders' },
       { name: 'Customers', icon: 'fa-user-group', path: '/dashboard/manager/customers' },
+      { name: 'Profile', icon: 'fa-user', path: '/dashboard/manager/profile' },
       { name: 'Outlet Stats', icon: 'fa-chart-simple', path: '/dashboard/manager/stats' },
     ],
   };

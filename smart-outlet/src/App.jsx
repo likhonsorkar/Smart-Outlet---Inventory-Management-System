@@ -12,6 +12,7 @@ import { featuredProducts, popularProducts } from './data';
 import CustomerDashboard from './pages/CustomerDashboard';
 import AdminDashboard from './pages/AdminDashboard';
 import ManagerDashboard from './pages/ManagerDashboard';
+import ProfileSettings from './pages/ProfileSettings';
 
 // Auth Pages
 import Login from './pages/Login';
@@ -94,8 +95,13 @@ const AppContent = () => {
         
         {/* Dashboard Routes */}
         <Route path="/dashboard/customer" element={<CustomerDashboard />} />
+        <Route path="/dashboard/customer/profile" element={<ProfileSettings role="customer" />} />
+
         <Route path="/dashboard/admin" element={<AdminDashboard />} />
+        <Route path="/dashboard/admin/profile" element={<ProfileSettings role="admin" />} />
+
         <Route path="/dashboard/manager" element={<ManagerDashboard />} />
+        <Route path="/dashboard/manager/profile" element={<ProfileSettings role="manager" />} />
       </Routes>
 
       {!isDashboard && <Footer />}

@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DashboardLayout from '../components/Dashboard/DashboardLayout';
 import StatCard from '../components/Dashboard/StatCard';
@@ -105,7 +105,10 @@ const CustomerDashboard = () => {
               <p className="text-white/60 font-medium text-xs md:text-sm mb-8">Premium Member since 2023</p>
               
               <div className="w-full space-y-3 md:space-y-4">
-                <button className="w-full py-3 md:py-4 bg-white text-blue-600 rounded-xl md:rounded-2xl font-black text-xs md:text-sm hover:bg-blue-50 transition-all shadow-xl shadow-blue-900/10">
+                <button 
+                  onClick={() => navigate('/dashboard/customer/profile')}
+                  className="w-full py-3 md:py-4 bg-white text-blue-600 rounded-xl md:rounded-2xl font-black text-xs md:text-sm hover:bg-blue-50 transition-all shadow-xl shadow-blue-900/10"
+                >
                   EDIT PROFILE
                 </button>
                 <button 
