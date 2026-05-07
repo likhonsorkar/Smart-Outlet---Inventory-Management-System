@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'account',
+    'goods',
     'api',
     'rest_framework',
     'rest_framework_simplejwt',
@@ -153,6 +154,7 @@ SIMPLE_JWT = {
 DJOSER = {
     'SERIALIZERS': {
         'user_create': 'account.serializers.UserCreateSerializers',
+        'current_user': 'account.serializers.UserSerializer',
     },
     
 }

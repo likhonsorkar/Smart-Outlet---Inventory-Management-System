@@ -14,3 +14,12 @@ class ProfileOwner(permissions.BasePermission):
         # In our case, the 'obj' is the User instance (or UserProfile if we changed the viewset)
         # But UserProfileViewSet.get_object returns the User instance.
         return obj == request.user
+
+class IsAdminOrManager(permissions.BasePermission):
+    """
+    Custom permission to only allow admins and managers to edit.
+    """
+    def has_permission(self, request, view):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        return request.user.is_authenticated and request.user.role in ['admin', 'manager', 'outlet_manager']

@@ -1,8 +1,10 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import authService from '../../services/auth-service';
 
 const Sidebar = ({ role, isOpen, setIsOpen }) => {
   const location = useLocation();
+  const navigate = useNavigate();
   
   const menuItems = {
     customer: [
@@ -14,6 +16,7 @@ const Sidebar = ({ role, isOpen, setIsOpen }) => {
     ],
     admin: [
       { name: 'Dashboard', icon: 'fa-chart-line', path: '/dashboard/admin' },
+      { name: 'Categories', icon: 'fa-tags', path: '/dashboard/admin/categories' },
       { name: 'Products', icon: 'fa-laptop', path: '/dashboard/admin/products' },
       { name: 'Users', icon: 'fa-users', path: '/dashboard/admin/users' },
       { name: 'Orders', icon: 'fa-shopping-cart', path: '/dashboard/admin/orders' },
@@ -22,6 +25,7 @@ const Sidebar = ({ role, isOpen, setIsOpen }) => {
     ],
     manager: [
       { name: 'POS Terminal', icon: 'fa-cash-register', path: '/dashboard/manager' },
+      { name: 'Categories', icon: 'fa-tags', path: '/dashboard/manager/categories' },
       { name: 'Inventory', icon: 'fa-warehouse', path: '/dashboard/manager/inventory' },
       { name: 'Custom Orders', icon: 'fa-clipboard-list', path: '/dashboard/manager/custom-orders' },
       { name: 'Customers', icon: 'fa-user-group', path: '/dashboard/manager/customers' },
@@ -30,7 +34,12 @@ const Sidebar = ({ role, isOpen, setIsOpen }) => {
     ],
   };
 
-  const currentMenu = menuItems[role] || [];
+  const handleLogout = () => {
+    authService.logoutUser();
+    navigate('/login');
+  };
+
+  const currentMenu = menuItems[role] || (role === 'outlet_manager' ? menuItems.manager : []);
 
   return (
     <>
@@ -83,7 +92,10 @@ const Sidebar = ({ role, isOpen, setIsOpen }) => {
             <i className="fa-solid fa-house"></i>
             Back to Home
           </Link>
-          <button className="flex items-center gap-4 px-4 py-3 w-full text-red-500 font-bold hover:bg-red-50 rounded-2xl transition-all">
+          <button 
+            onClick={handleLogout}
+            className="flex items-center gap-4 px-4 py-3 w-full text-red-500 font-bold hover:bg-red-50 rounded-2xl transition-all"
+          >
             <i className="fa-solid fa-right-from-bracket"></i>
             Logout
           </button>

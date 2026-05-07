@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import authService from '../services/auth-service';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -14,18 +17,25 @@ const Header = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    const token = localStorage.getItem('access_token');
+    setIsLoggedIn(!!token);
+  }, [location]);
+
   // Close menu when route changes
   useEffect(() => {
     setIsMenuOpen(false);
   }, [location]);
 
+  const handleLogout = () => {
+    authService.logoutUser();
+    setIsLoggedIn(false);
+    navigate('/login');
+  };
+
   const navLinks = [
     { name: 'Home', path: '/' },
-    { name: 'Dashboards', path: '/dashboard/customer', dropdown: [
-      { name: 'Customer', path: '/dashboard/customer' },
-      { name: 'Admin', path: '/dashboard/admin' },
-      { name: 'Manager (POS)', path: '/dashboard/manager' },
-    ]},
+    { name: 'Dashboard', path: '/dashboard' },
     { name: 'Shop', path: '#' },
     { name: 'Collections', path: '#' },
   ];
@@ -66,9 +76,19 @@ const Header = () => {
             <i className="fa-solid fa-magnifying-glass text-gray-400 mr-2"></i>
             <input type="text" placeholder="Search..." className="bg-transparent border-none focus:ring-0 text-sm w-32 lg:w-48 outline-none" />
           </div>
-          <Link to="/login" className="hover:text-blue-600 transition-all relative p-2 rounded-full hover:bg-gray-100">
-            <i className="fa-regular fa-user text-xl"></i>
-          </Link>
+          {isLoggedIn ? (
+            <button 
+              onClick={handleLogout}
+              className="hover:text-red-600 transition-all relative p-2 rounded-full hover:bg-gray-100"
+              title="Logout"
+            >
+              <i className="fa-solid fa-right-from-bracket text-xl"></i>
+            </button>
+          ) : (
+            <Link to="/login" className="hover:text-blue-600 transition-all relative p-2 rounded-full hover:bg-gray-100">
+              <i className="fa-regular fa-user text-xl"></i>
+            </Link>
+          )}
           <a href="#" className="hover:text-blue-600 transition-all relative p-2 rounded-full hover:bg-gray-100">
             <i className="fa-solid fa-cart-shopping text-xl"></i>
             <span className="absolute top-1 right-1 bg-blue-600 text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center border-2 border-white">2</span>

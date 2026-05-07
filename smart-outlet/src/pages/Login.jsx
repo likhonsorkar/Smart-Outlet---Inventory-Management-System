@@ -10,10 +10,24 @@ const Login = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem('access_token');
-    if (token) {
-      navigate('/dashboard/customer');
-    }
+    const checkUser = async () => {
+      const token = localStorage.getItem('access_token');
+      if (token) {
+        try {
+          const user = await authService.getCurrentUser();
+          const dashboardMap = {
+            admin: '/dashboard/admin',
+            manager: '/dashboard/manager',
+            customer: '/dashboard/customer',
+            outlet_manager: '/dashboard/manager',
+          };
+          navigate(dashboardMap[user.role] || '/dashboard/customer');
+        } catch (error) {
+          // Token might be invalid, stay on login
+        }
+      }
+    };
+    checkUser();
   }, [navigate]);
 
   const onSubmit = async (data) => {
@@ -25,9 +39,16 @@ const Login = () => {
         password: data.password,
         remember_me: data.rememberMe || false,
       };
-      await authService.loginUser(credentials);
-      navigate('/dashboard/customer');
-    } catch (error) {
+      const response = await authService.loginUser(credentials);
+      // Fetch user data to get the role
+      const user = await authService.getCurrentUser();
+      const dashboardMap = {
+        admin: '/dashboard/admin',
+        manager: '/dashboard/manager',
+        customer: '/dashboard/customer',
+        outlet_manager: '/dashboard/manager',
+      };
+      navigate(dashboardMap[user.role] || '/dashboard/customer');    } catch (error) {
       console.error('Login Error:', error);
       if (error.response?.data?.detail) {
         setApiError(error.response.data.detail);

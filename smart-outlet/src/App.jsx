@@ -13,10 +13,13 @@ import CustomerDashboard from './pages/CustomerDashboard';
 import AdminDashboard from './pages/AdminDashboard';
 import ManagerDashboard from './pages/ManagerDashboard';
 import ProfileSettings from './pages/ProfileSettings';
+import CategoryManagement from './pages/CategoryManagement';
 
 // Auth Pages
 import Login from './pages/Login';
 import Register from './pages/Register';
+import ProtectedRoute from './components/ProtectedRoute';
+import DashboardRedirect from './pages/DashboardRedirect';
 
 const HomePage = () => (
   <main className="flex-grow pt-24">
@@ -94,14 +97,49 @@ const AppContent = () => {
         <Route path="/register" element={<Register />} />
         
         {/* Dashboard Routes */}
-        <Route path="/dashboard/customer" element={<CustomerDashboard />} />
-        <Route path="/dashboard/customer/profile" element={<ProfileSettings role="customer" />} />
+        <Route path="/dashboard" element={<DashboardRedirect />} />
+        <Route path="/dashboard/customer" element={
+          <ProtectedRoute allowedRoles={['customer']}>
+            <CustomerDashboard />
+          </ProtectedRoute>
+        } />
+        <Route path="/dashboard/customer/profile" element={
+          <ProtectedRoute allowedRoles={['customer']}>
+            <ProfileSettings role="customer" />
+          </ProtectedRoute>
+        } />
 
-        <Route path="/dashboard/admin" element={<AdminDashboard />} />
-        <Route path="/dashboard/admin/profile" element={<ProfileSettings role="admin" />} />
+        <Route path="/dashboard/admin" element={
+          <ProtectedRoute allowedRoles={['admin']}>
+            <AdminDashboard />
+          </ProtectedRoute>
+        } />
+        <Route path="/dashboard/admin/categories" element={
+          <ProtectedRoute allowedRoles={['admin']}>
+            <CategoryManagement role="admin" />
+          </ProtectedRoute>
+        } />
+        <Route path="/dashboard/admin/profile" element={
+          <ProtectedRoute allowedRoles={['admin']}>
+            <ProfileSettings role="admin" />
+          </ProtectedRoute>
+        } />
 
-        <Route path="/dashboard/manager" element={<ManagerDashboard />} />
-        <Route path="/dashboard/manager/profile" element={<ProfileSettings role="manager" />} />
+        <Route path="/dashboard/manager" element={
+          <ProtectedRoute allowedRoles={['manager', 'outlet_manager']}>
+            <ManagerDashboard />
+          </ProtectedRoute>
+        } />
+        <Route path="/dashboard/manager/categories" element={
+          <ProtectedRoute allowedRoles={['manager', 'outlet_manager']}>
+            <CategoryManagement role="manager" />
+          </ProtectedRoute>
+        } />
+        <Route path="/dashboard/manager/profile" element={
+          <ProtectedRoute allowedRoles={['manager', 'outlet_manager']}>
+            <ProfileSettings role="manager" />
+          </ProtectedRoute>
+        } />
       </Routes>
 
       {!isDashboard && <Footer />}

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import DashboardLayout from '../components/Dashboard/DashboardLayout';
 import profileService from '../services/profile-service';
 
+import { Link } from 'react-router-dom';
+
 const ProfileSettings = ({ role }) => {
   const [profile, setProfile] = useState({
     first_name: '',
@@ -65,8 +67,11 @@ const ProfileSettings = ({ role }) => {
       if (imageFile) {
         updateData.profile_image = imageFile;
       }
-      await profileService.updateProfile(updateData);
+      const updatedProfile = await profileService.updateProfile(updateData);
+      setProfile(updatedProfile);
+      setImageFile(null);
       setMessage({ type: 'success', text: 'Profile updated successfully!' });
+      setTimeout(() => setMessage({ type: '', text: '' }), 5000);
     } catch (error) {
       console.error('Error updating profile:', error);
       setMessage({ type: 'error', text: 'Failed to update profile' });
@@ -88,13 +93,27 @@ const ProfileSettings = ({ role }) => {
   return (
     <DashboardLayout role={role}>
       <div className='max-w-4xl mx-auto'>
-        <div className='bg-white rounded-[2rem] md:rounded-[3rem] p-8 md:p-12 shadow-sm border border-gray-50'>
-          <h2 className='text-3xl font-black text-gray-900 tracking-tighter mb-8'>
-            Profile <span className='text-blue-600'>Settings</span>
-          </h2>
+        <div className='flex items-center justify-between mb-8'>
+          <div>
+            <h2 className='text-3xl font-black text-gray-900 tracking-tighter'>
+              Profile <span className='text-blue-600'>Settings</span>
+            </h2>
+            <p className='text-gray-400 font-bold mt-1 text-sm'>Manage your personal information</p>
+          </div>
+          <Link 
+            to="/dashboard" 
+            className='flex items-center gap-2 text-gray-400 hover:text-blue-600 font-bold transition-all'
+          >
+            <i className="fa-solid fa-arrow-left"></i>
+            BACK TO DASHBOARD
+          </Link>
+        </div>
 
+        <div className='bg-white rounded-[2rem] md:rounded-[3rem] p-8 md:p-12 shadow-sm border border-gray-50'>
           {message.text && (
-            <div className='p-4 rounded-2xl mb-8 font-bold '>
+            <div className={`p-4 rounded-2xl mb-8 font-bold text-center animate-in fade-in slide-in-from-top-4 duration-300 ${
+              message.type === 'success' ? 'bg-green-50 text-green-600 border border-green-100' : 'bg-red-50 text-red-600 border border-red-100'
+            }`}>
               {message.text}
             </div>
           )}
