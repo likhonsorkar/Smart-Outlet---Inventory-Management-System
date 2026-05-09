@@ -38,7 +38,7 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
       admin: '/dashboard/admin',
       manager: '/dashboard/manager',
       customer: '/dashboard/customer',
-      outlet_manager: '/dashboard/manager', // Or a specific dashboard if one is created
+      outlet_manager: '/dashboard/manager', 
     };
     return <Navigate to={dashboardMap[user.role] || '/'} replace />;
   }
