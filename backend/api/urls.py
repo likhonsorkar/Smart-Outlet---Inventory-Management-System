@@ -1,16 +1,18 @@
 from django.urls import path, include
 from rest_framework_nested import routers
 from account.views import MyTokenView, UserProfileViewSet
-from goods.views import CategoryViewSet
+from goods.views import CategoryViewSet, GoodsViewSet, GoodsBatchViewSet
 
 # Main router
 router = routers.DefaultRouter()
 router.register('profile', UserProfileViewSet, basename='profile')
-router.register(r'categories', CategoryViewSet, basename='category')
+router.register('categories', CategoryViewSet, basename='category')
+router.register('goods', GoodsViewSet, basename='goods')
+router.register('batches', GoodsBatchViewSet, basename='batch')
 
 # Nested router for categories/id/sub_categories/
 categories_router = routers.NestedDefaultRouter(router, r'categories', lookup='category')
-categories_router.register(r'sub_categories', CategoryViewSet, basename='category-sub')
+categories_router.register('sub_categories', CategoryViewSet, basename='category-sub')
 
 urlpatterns = [
     path("api-auth/", include("rest_framework.urls")),

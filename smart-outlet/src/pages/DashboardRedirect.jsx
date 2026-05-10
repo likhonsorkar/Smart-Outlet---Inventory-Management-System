@@ -36,7 +36,7 @@ const DashboardRedirect = () => {
     admin: '/dashboard/admin',
     manager: '/dashboard/manager',
     customer: '/dashboard/customer',
-    outlet_manager: '/dashboard/manager',
+    outlet_manager: '/dashboard/outlet-manager',
   };
 
   return <Navigate to={dashboardMap[user.role] || '/dashboard/customer'} replace />;

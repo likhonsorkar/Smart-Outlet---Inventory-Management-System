@@ -11,11 +11,20 @@ class UserCreateSerializers(DjoserUserCreateSerializer):
 
 class TokenSerializer(TokenObtainPairSerializer):
     remember_me = serializers.BooleanField(required=False, default=False)
+    
     def validate(self, attrs):
+        # Remove remember_me from attrs so super().validate doesn't get confused
+        remember = attrs.pop('remember_me', False)
+        
         data = super().validate(attrs)
-        remember = self.context['request'].data.get('remember_me')
+        
         if remember:
-            self.token.set_exp(lifetime=timedelta(days=30))
+            # Re-generate token with longer lifetime if remember_me is True
+            refresh = self.get_token(self.user)
+            refresh.set_exp(lifetime=timedelta(days=30))
+            data['refresh'] = str(refresh)
+            data['access'] = str(refresh.access_token)
+            
         return data
     
 class ProfileSerializer(serializers.ModelSerializer):

@@ -19,7 +19,7 @@ const Login = () => {
             admin: '/dashboard/admin',
             manager: '/dashboard/manager',
             customer: '/dashboard/customer',
-            outlet_manager: '/dashboard/manager',
+            outlet_manager: '/dashboard/outlet-manager',
           };
           navigate(dashboardMap[user.role] || '/dashboard/customer');
         } catch (error) {
@@ -46,7 +46,7 @@ const Login = () => {
         admin: '/dashboard/admin',
         manager: '/dashboard/manager',
         customer: '/dashboard/customer',
-        outlet_manager: '/dashboard/manager',
+        outlet_manager: '/dashboard/outlet-manager',
       };
       navigate(dashboardMap[user.role] || '/dashboard/customer');    } catch (error) {
       console.error('Login Error:', error);

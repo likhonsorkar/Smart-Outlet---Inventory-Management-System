@@ -12,8 +12,10 @@ import { featuredProducts, popularProducts } from './data';
 import CustomerDashboard from './pages/CustomerDashboard';
 import AdminDashboard from './pages/AdminDashboard';
 import ManagerDashboard from './pages/ManagerDashboard';
+import OutletManagerDashboard from './pages/OutletManagerDashboard';
 import ProfileSettings from './pages/ProfileSettings';
 import CategoryManagement from './pages/CategoryManagement';
+import ProductStockManagement from './pages/ProductStockManagement';
 
 // Auth Pages
 import Login from './pages/Login';
@@ -114,6 +116,11 @@ const AppContent = () => {
             <AdminDashboard />
           </ProtectedRoute>
         } />
+        <Route path="/dashboard/admin/products" element={
+          <ProtectedRoute allowedRoles={['admin']}>
+            <ProductStockManagement role="admin" />
+          </ProtectedRoute>
+        } />
         <Route path="/dashboard/admin/categories" element={
           <ProtectedRoute allowedRoles={['admin']}>
             <CategoryManagement role="admin" />
@@ -126,18 +133,40 @@ const AppContent = () => {
         } />
 
         <Route path="/dashboard/manager" element={
-          <ProtectedRoute allowedRoles={['manager', 'outlet_manager']}>
+          <ProtectedRoute allowedRoles={['manager']}>
             <ManagerDashboard />
           </ProtectedRoute>
         } />
+        <Route path="/dashboard/manager/inventory" element={
+          <ProtectedRoute allowedRoles={['manager']}>
+            <ProductStockManagement role="manager" />
+          </ProtectedRoute>
+        } />
         <Route path="/dashboard/manager/categories" element={
-          <ProtectedRoute allowedRoles={['manager', 'outlet_manager']}>
+          <ProtectedRoute allowedRoles={['manager']}>
             <CategoryManagement role="manager" />
           </ProtectedRoute>
         } />
         <Route path="/dashboard/manager/profile" element={
-          <ProtectedRoute allowedRoles={['manager', 'outlet_manager']}>
+          <ProtectedRoute allowedRoles={['manager']}>
             <ProfileSettings role="manager" />
+          </ProtectedRoute>
+        } />
+
+        {/* Outlet Manager Routes */}
+        <Route path="/dashboard/outlet-manager" element={
+          <ProtectedRoute allowedRoles={['outlet_manager']}>
+            <OutletManagerDashboard />
+          </ProtectedRoute>
+        } />
+        <Route path="/dashboard/outlet-manager/inventory" element={
+          <ProtectedRoute allowedRoles={['outlet_manager']}>
+            <ProductStockManagement role="outlet_manager" />
+          </ProtectedRoute>
+        } />
+        <Route path="/dashboard/outlet-manager/profile" element={
+          <ProtectedRoute allowedRoles={['outlet_manager']}>
+            <ProfileSettings role="outlet_manager" />
           </ProtectedRoute>
         } />
       </Routes>

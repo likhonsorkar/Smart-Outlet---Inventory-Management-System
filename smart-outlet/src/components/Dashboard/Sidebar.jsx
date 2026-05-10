@@ -24,13 +24,19 @@ const Sidebar = ({ role, isOpen, setIsOpen }) => {
       { name: 'Reports', icon: 'fa-file-invoice-dollar', path: '/dashboard/admin/reports' },
     ],
     manager: [
-      { name: 'POS Terminal', icon: 'fa-cash-register', path: '/dashboard/manager' },
+      { name: 'Product Management', icon: 'fa-box-open', path: '/dashboard/manager' },
       { name: 'Categories', icon: 'fa-tags', path: '/dashboard/manager/categories' },
       { name: 'Inventory', icon: 'fa-warehouse', path: '/dashboard/manager/inventory' },
       { name: 'Custom Orders', icon: 'fa-clipboard-list', path: '/dashboard/manager/custom-orders' },
       { name: 'Customers', icon: 'fa-user-group', path: '/dashboard/manager/customers' },
       { name: 'Profile', icon: 'fa-user', path: '/dashboard/manager/profile' },
       { name: 'Outlet Stats', icon: 'fa-chart-simple', path: '/dashboard/manager/stats' },
+    ],
+    outlet_manager: [
+      { name: 'Outlet POS', icon: 'fa-cash-register', path: '/dashboard/outlet-manager' },
+      { name: 'Local Inventory', icon: 'fa-warehouse', path: '/dashboard/outlet-manager/inventory' },
+      { name: 'Orders', icon: 'fa-receipt', path: '/dashboard/outlet-manager/orders' },
+      { name: 'Profile', icon: 'fa-user', path: '/dashboard/outlet-manager/profile' },
     ],
   };
 
@@ -39,7 +45,7 @@ const Sidebar = ({ role, isOpen, setIsOpen }) => {
     navigate('/login');
   };
 
-  const currentMenu = menuItems[role] || (role === 'outlet_manager' ? menuItems.manager : []);
+  const currentMenu = menuItems[role] || [];
 
   return (
     <>

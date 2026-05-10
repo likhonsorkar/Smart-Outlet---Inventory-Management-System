@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'account',
     'goods',
     'api',
+    'outlet',
     'rest_framework',
     'rest_framework_simplejwt',
     'djoser',
